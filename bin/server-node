@@ -4,7 +4,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const basedir = 'build';
+const basedir = '../build';
 const port = process.env.PORT || 3000;
 
 http.createServer(function(request, response) {
@@ -44,7 +44,8 @@ http.createServer(function(request, response) {
         fs.readFile(basedir + filePath, function(error, content) {
             if (error) {
                 if (error.code == 'ENOENT') {
-                    console.log('404: ' + filePath);
+                    console.log('404: ' + basedir + filePath);
+                    console.log(error);
                     response.writeHead(404);
                     response.end();
                 } else {
