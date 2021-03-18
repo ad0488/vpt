@@ -9,7 +9,8 @@ main počaka, da se loadajo zadeve -> const application
 RenderingContext! -> WEBGL, canvas, camera, podatki o telesu itd.
 UISPECS package -> struktura html, ki naj se zgradi (ker se ni bilo WebComponent)
 TEMPLATES.Slider in ostalo se sklicuje na mapo HTML
-nov html, nov js file, nov controller za widget, treba je registrirat (UI.js), css, , 
+nov html, nov js file, nov controller za widget, treba je registrirat (UI.js), css, ,
+
 pipeline
 1. renderer -> output slika / izbira na UI
 2. tonemapper -> kompresija dinamičnega razpona / natančno sliko stisne v range za zaslon / izbira na UI

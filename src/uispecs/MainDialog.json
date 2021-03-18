@@ -116,6 +116,52 @@
             }
           ]
         },
+        "Tools": {
+          "type": "panel",
+          "children": [
+            {
+              "type": "panel",
+              "bind": "tools"
+            },
+            {
+              "type": "field",
+              "label": "Slider:",
+              "children": [
+                {
+                  "type": "slider",
+                  "value": 0.5,
+                  "min": 0.00001,
+                  "max": 0.99999,
+                  "step": 0.1
+                }
+              ]
+            },
+            {
+              "type": "field",
+              "label": "Droppy:",
+              "children": [
+                {
+                  "type": "dropdown",
+                  "options": [
+                    {
+                      "value": "range",
+                      "label": "Range"
+                    },
+                    {
+                      "value": "reinhard",
+                      "label": "Reinhard",
+                      "selected": true
+                    },
+                    {
+                      "value": "artistic",
+                      "label": "Artistic"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
         "About": {
           "type": "panel",
           "bind": "about"
