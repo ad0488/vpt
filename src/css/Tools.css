@@ -1,0 +1,35 @@
+/* #package css/main */
+
+.tools {
+    padding: 0 10px;
+}
+
+.tools .center {
+    display: flex;
+    justify-content: center;
+}
+
+.imagebox {
+    text-align: center;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: center;
+}
+
+.para {
+    display: flex;
+    justify-content: center; /* align horizontal */
+    align-items: center; /* align vertical */
+}
+
+.previmg {
+    border-style: solid;
+    margin-left: 10px;
+    margin-right: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.prevbutton {
+
+}
