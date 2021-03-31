@@ -18,3 +18,8 @@ pipeline
 abstractRenderer ima prenosno funkcijo
 transferfunctionwidget
 
+
+odstrani context
+v app.js v constructorju poklici volumeload
+ajax request za spreminjanje parametrov tf
+

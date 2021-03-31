@@ -14,14 +14,14 @@ constructor(renderer, options) {
 
     this._handleChange = this._handleChange.bind(this);
     this._handleTFChange = this._handleTFChange.bind(this);
-
+    /*
     this._binds.extinction.addEventListener('input', this._handleChange);
     this._binds.albedo.addEventListener('change', this._handleChange);
     this._binds.bias.addEventListener('change', this._handleChange);
     this._binds.ratio.addEventListener('change', this._handleChange);
     this._binds.bounces.addEventListener('input', this._handleChange);
     this._binds.steps.addEventListener('input', this._handleChange);
-
+    */
     this._tfwidget = new TransferFunctionWidget();
     this._binds.tfcontainer.add(this._tfwidget);
     this._tfwidget.addEventListener('change', this._handleTFChange);

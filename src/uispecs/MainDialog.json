@@ -9,21 +9,6 @@
     {
       "type": "tabs",
       "children": {
-        "Data": {
-          "type": "panel",
-          "children": [
-            {
-              "type": "accordion",
-              "bind": "volumeLoadContainer",
-              "label": "Volume"
-            },
-            {
-              "type": "accordion",
-              "bind": "envmapLoadContainer",
-              "label": "Environment"
-            }
-          ]
-        },
         "Settings": {
           "type": "panel",
           "children": [
@@ -76,58 +61,10 @@
             },
             {
               "type": "accordion",
-              "label": "Tone mapper",
-              "children": [
-                {
-                  "type": "field",
-                  "label": "Tone mapper:",
-                  "children": [
-                    {
-                      "type": "dropdown",
-                      "bind": "toneMapperSelect",
-                      "options": [
-                        {
-                          "value": "range",
-                          "label": "Range"
-                        },
-                        {
-                          "value": "reinhard",
-                          "label": "Reinhard"
-                        },
-                        {
-                          "value": "artistic",
-                          "label": "Artistic",
-                          "selected": true
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "type": "panel",
-                  "bind": "toneMapperSettingsContainer"
-                }
-              ]
-            },
-            {
-              "type": "accordion",
               "bind": "renderingContextSettingsContainer",
               "label": "Context"
             }
           ]
-        },
-        "Tools": {
-          "type": "panel",
-          "children": [
-            {
-              "type": "panel",
-              "bind": "tools"
-            }
-          ]
-        },
-        "About": {
-          "type": "panel",
-          "bind": "about"
         }
       }
     }

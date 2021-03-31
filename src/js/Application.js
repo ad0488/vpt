@@ -40,7 +40,7 @@ constructor() {
 
     this._statusBar = new StatusBar();
     this._statusBar.appendTo(document.body);
-
+    /*
     this._volumeLoadDialog = new VolumeLoadDialog();
     this._volumeLoadDialog.appendTo(this._mainDialog.getVolumeLoadContainer());
     this._volumeLoadDialog.addEventListener('load', this._handleVolumeLoad);
@@ -48,7 +48,7 @@ constructor() {
     this._envmapLoadDialog = new EnvmapLoadDialog();
     this._envmapLoadDialog.appendTo(this._mainDialog.getEnvmapLoadContainer());
     this._envmapLoadDialog.addEventListener('load', this._handleEnvmapLoad);
-
+    */
     this._renderingContextDialog = new RenderingContextDialog();
     this._renderingContextDialog.appendTo(
         this._mainDialog.getRenderingContextSettingsContainer());

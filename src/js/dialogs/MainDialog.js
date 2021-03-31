@@ -15,6 +15,7 @@ constructor(options) {
     this._handleToneMapperChange = this._handleToneMapperChange.bind(this);
 
     this._binds.sidebar.appendTo(document.body);
+    /*
     this._binds.rendererSelect.addEventListener('change', this._handleRendererChange);
     this._binds.toneMapperSelect.addEventListener('change', this._handleToneMapperChange);
 
@@ -25,6 +26,7 @@ constructor(options) {
 
     const about = DOMUtils.instantiate(TEMPLATES.AboutText);
     this._binds.about._element.appendChild(about);
+    */
 }
 
 getVolumeLoadContainer() {
@@ -66,7 +68,7 @@ _handleToneMapperChange() {
 }
 
 disableMCC() {
-    this._binds.rendererSelect.removeOption('mcc');
+    // this._binds.rendererSelect.removeOption('mcc');
 }
 
 }
