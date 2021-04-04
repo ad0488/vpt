@@ -37,10 +37,10 @@ constructor() {
     if (!this._renderingContext.hasComputeCapabilities()) {
         this._mainDialog.disableMCC();
     }
-
+    /*
     this._statusBar = new StatusBar();
     this._statusBar.appendTo(document.body);
-    /*
+
     this._volumeLoadDialog = new VolumeLoadDialog();
     this._volumeLoadDialog.appendTo(this._mainDialog.getVolumeLoadContainer());
     this._volumeLoadDialog.addEventListener('load', this._handleVolumeLoad);
@@ -48,7 +48,7 @@ constructor() {
     this._envmapLoadDialog = new EnvmapLoadDialog();
     this._envmapLoadDialog.appendTo(this._mainDialog.getEnvmapLoadContainer());
     this._envmapLoadDialog.addEventListener('load', this._handleEnvmapLoad);
-    */
+
     this._renderingContextDialog = new RenderingContextDialog();
     this._renderingContextDialog.appendTo(
         this._mainDialog.getRenderingContextSettingsContainer());
@@ -64,7 +64,7 @@ constructor() {
     this._renderingContextDialog.addEventListener('filter', options => {
         this._renderingContext.setFilter(options.filter);
     });
-
+    */
     this._mainDialog.addEventListener('rendererchange', this._handleRendererChange);
     this._mainDialog.addEventListener('tonemapperchange', this._handleToneMapperChange);
     this._mainDialog.trigger('rendererchange', this._mainDialog.getSelectedRenderer());

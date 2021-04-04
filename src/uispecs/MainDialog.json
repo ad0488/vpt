@@ -58,11 +58,6 @@
                   "bind": "rendererSettingsContainer"
                 }
               ]
-            },
-            {
-              "type": "accordion",
-              "bind": "renderingContextSettingsContainer",
-              "label": "Context"
             }
           ]
         }
