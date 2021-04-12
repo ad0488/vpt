@@ -23,3 +23,7 @@ odstrani context
 v app.js v constructorju poklici volumeload
 ajax request za spreminjanje parametrov tf
 
+volume.js line 83 za graf
+const hist = new Array(256*256).fill(0);
+getImageData za polnjenje canvasa
+treba je normalizirati podatke (logaritmiramo?)
