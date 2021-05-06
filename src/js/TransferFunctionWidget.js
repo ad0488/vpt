@@ -31,10 +31,20 @@ constructor(options) {
     this._$loadButton    = this._$html.querySelector('[name="load"]');
     this._$saveButton    = this._$html.querySelector('[name="save"]');
 
-    this._canvas = this._$html.querySelector('canvas');
+    this._canvas = this._$html.querySelector('canvas.histogram');
     this._canvas.width = this._transferFunctionWidth;
     this._canvas.height = this._transferFunctionHeight;
     this.resize(this._width, this._height);
+
+    this._canvas = this._$html.querySelector('canvas.bumpcanvas');
+    this._canvas.width = this._transferFunctionWidth;
+    this._canvas.height = this._transferFunctionHeight;
+    this.resize(this._width, this._height);
+
+
+
+
+
 
     this._gl = this._canvas.getContext('webgl2', {
         depth                 : false,

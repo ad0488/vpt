@@ -69,19 +69,37 @@ readModality(modalityName, handlers) {
         format = gl.RED;
     }
     gl.texStorage3D(gl.TEXTURE_3D, 1, internalFormat, dimensions.width, dimensions.height, dimensions.depth);
+    console.log(dimensions);
     let remainingBlocks = modality.placements.length;
+    /*
+    const hist = new Array(256 * 256).fill(0);
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = 256;
+    const ctx = canvas.getContext('2d');
+    const canvasData = ctx.getImageData(0, 0, 256, 256);
+    */
     modality.placements.forEach(placement => {
         this._reader.readBlock(placement.index, {
             onData: data => {
                 const position = placement.position;
                 const block = blocks[placement.index];
                 const blockdim = block.dimensions;
+                const typedData = data;
+                /*
+                console.log(data);
+                for (const value of typedData) {
+                    hist[value]++;
+                }
+                */
+
+
                 gl.bindTexture(gl.TEXTURE_3D, this._texture);
                 gl.texSubImage3D(gl.TEXTURE_3D, 0,
                     position.x, position.y, position.z,
                     blockdim.width, blockdim.height, blockdim.depth,
                     format, gl.UNSIGNED_BYTE, new Uint8Array(data));
                 remainingBlocks--;
+                // console.log(remainingBlocks);
                 if (remainingBlocks === 0) {
                     this.ready = true;
                     handlers.onLoad && handlers.onLoad();

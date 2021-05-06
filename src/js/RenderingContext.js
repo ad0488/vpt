@@ -246,6 +246,7 @@ getScale() {
 
 setScale(x, y, z) {
     this._scale.set(x, y, z);
+    console.log(this._scale);
     this._isTransformationDirty = true;
 }
 
