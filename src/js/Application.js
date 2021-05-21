@@ -14,6 +14,8 @@
 
 class Application {
 
+    // sqlite3 = require('sqlite3').verbose();
+
 constructor() {
     this._handleFileDrop = this._handleFileDrop.bind(this);
     this._handleRendererChange = this._handleRendererChange.bind(this);
@@ -239,6 +241,21 @@ _getDialogForToneMapper(toneMapper) {
             {type: 'url', url: 'images/volumes/statue_leg.raw', filetype: 'raw', dimensions: {x: 341, y: 341, z: 93}, precision: 8, scales: {x: 1, y: 1, z: 4}},
             {type: 'url', url: 'images/volumes/subclavia.raw', filetype: 'raw', dimensions: {x: 512, y: 512, z: 96}, precision: 8, scales: {x: 86636, y: 86636, z: 87963}},
             {type: 'url', url: 'images/volumes/tooth.raw', filetype: 'raw', dimensions: {x: 103, y: 94, z: 161}, precision: 8, scales: {x: 1, y: 1, z: 1}}];
+        /*
+        let db = new this.sqlite3.Database('test.db', (err) => {
+            if (err) {
+                return console.error(err.message);
+            }
+            console.log('Connected to the in-memory SQlite database.')
+        });
+
+        db.close((err) => {
+            if (err) {
+                return console.error(err.message);
+            }
+            console.log('Close the database connection.');
+        });
+        */
 
         return files[Math.floor(Math.random() * 18)];
     }
