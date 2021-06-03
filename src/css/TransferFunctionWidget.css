@@ -11,10 +11,6 @@
     background: url('../images/alpha-checkerboard.png') repeat;
 }
 
-.transfer-function-widget .histogram {
-    background: url('../images/alpha-checkerboard.png') repeat;
-}
-
 .transfer-function-widget .bump {
     width: 0;
     height: 0;

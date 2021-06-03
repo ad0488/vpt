@@ -218,11 +218,7 @@ _getDialogForToneMapper(toneMapper) {
 }
 
     getRandomFile() {
-    /*
-        const files = ['aneurism', 'angio', 'bonsai', 'boston_teapot', 'coronal_fem', 'coronal_mal', 'csafe_heptane',
-            'ct_knee', 'engine', 'foot', 'kidney', 'monkey_pet', 'mri_head', 'peripheral', 'skull', 'statue_leg', 'subclavia', 'tooth'];
 
-     */
         const files = [{type: 'url', url: 'images/volumes/aneurism.raw', filetype: 'raw', dimensions: {x: 256, y: 256, z: 256}, precision: 8, scales: {x: 1, y: 1, z: 1}},
             {type: 'url', url: 'images/volumes/angio.raw', filetype: 'raw', dimensions: {x: 384, y: 512, z: 80}, precision: 8, scales: {x: 324673, y: 324885, z: 493750}},
             {type: 'url', url: 'images/volumes/bonsai.raw', filetype: 'raw', dimensions: {x: 256, y: 256, z: 256}, precision: 8, scales: {x: 1, y: 1, z: 1}},
@@ -241,22 +237,17 @@ _getDialogForToneMapper(toneMapper) {
             {type: 'url', url: 'images/volumes/statue_leg.raw', filetype: 'raw', dimensions: {x: 341, y: 341, z: 93}, precision: 8, scales: {x: 1, y: 1, z: 4}},
             {type: 'url', url: 'images/volumes/subclavia.raw', filetype: 'raw', dimensions: {x: 512, y: 512, z: 96}, precision: 8, scales: {x: 86636, y: 86636, z: 87963}},
             {type: 'url', url: 'images/volumes/tooth.raw', filetype: 'raw', dimensions: {x: 103, y: 94, z: 161}, precision: 8, scales: {x: 1, y: 1, z: 1}}];
-        /*
-        let db = new this.sqlite3.Database('test.db', (err) => {
-            if (err) {
-                return console.error(err.message);
-            }
-            console.log('Connected to the in-memory SQlite database.')
-        });
 
-        db.close((err) => {
-            if (err) {
-                return console.error(err.message);
-            }
-            console.log('Close the database connection.');
-        });
-        */
+        const file = files[Math.floor(Math.random() * 18)];
 
-        return files[Math.floor(Math.random() * 18)];
+        this.dbSendVolume(file.url);
+
+        return file;
+    }
+
+    dbSendVolume(volume) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', volume, true);
+        xhr.send(volume);
     }
 }

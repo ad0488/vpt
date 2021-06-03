@@ -44,7 +44,7 @@ http.createServer(function(request, response) {
     if (request.method === 'GET') {
         fs.readFile(basedir + filePath, function(error, content) {
             if (error) {
-                if (error.code == 'ENOENT') {
+                if (error.code === 'ENOENT') {
                     console.log('404: ' + basedir + filePath);
                     console.log(error);
                     response.writeHead(404);
@@ -77,7 +77,7 @@ http.createServer(function(request, response) {
     } else if (request.method === 'HEAD' || request.method === 'OPTIONS') {
         fs.lstat(basedir + filePath, function(error, stat) {
             if (error) {
-                if (error.code == 'ENOENT') {
+                if (error.code === 'ENOENT') {
                     console.log('404: ' + filePath);
                     response.writeHead(404);
                     response.end();
@@ -97,6 +97,45 @@ http.createServer(function(request, response) {
                 response.end();
             }
         });
+    } else if (request.method === 'POST') {
+        fs.lstat(basedir + filePath, function (error, stat) {
+            if (error) {
+                if (error.code === 'ENOENT') {
+                    console.log('404: ' + filePath);
+                    response.writeHead(404);
+                    response.end();
+                } else {
+                    console.log('500: ' + filePath);
+                    response.writeHead(500);
+                    response.end('Server error: ' + error.code);
+                }
+            } else {
+                response.writeHead(200, {
+                    'Content-Type': contentType,
+                    'Content-Length': stat.size,
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'POST',
+                    'Access-Control-Allow-Headers': 'Range'
+                });
+                response.end();
+
+                let db = new sqlite3.Database('test.db', (err) => {
+                    if (err) {
+                        return console.error(err.message);
+                    }
+                    console.log('Connected to the in-memory SQlite database.')
+                });
+
+                let sql = 'INSERT INTO Volumes (Title) VALUES(?)';
+                db.run(sql, [filePath], function (err) {
+                    if (err) {
+                        return console.log(err.message);
+                    }
+                    console.log('A row has been inserted!');
+                });
+                db.close();
+            }
+        })
     } else {
         response.writeHead(404);
         response.end();
@@ -106,6 +145,7 @@ http.createServer(function(request, response) {
 
 console.log('Listening on port ' + port);
 
+/*
 let db = new sqlite3.Database('test.db', (err) => {
     if (err) {
         return console.error(err.message);
@@ -119,3 +159,4 @@ db.close((err) => {
     }
     console.log('Close the database connection.');
 });
+*/
