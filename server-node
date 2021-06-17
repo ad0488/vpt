@@ -10,6 +10,12 @@ const port = process.env.PORT || 3001;
 
 http.createServer(function(request, response) {
     const range = request.headers.range;
+
+    let data = '';
+    request.on('data', function (chunk) {
+        data += chunk;
+    });
+
     if (range) {
         console.log(request.method, request.url, range);
     } else {
@@ -126,6 +132,34 @@ http.createServer(function(request, response) {
                     console.log('Connected to the in-memory SQlite database.')
                 });
 
+                if(filePath.startsWith("/images/volumes", 0)) {
+                    let sql = 'UPDATE Volumes SET Count = Count + 1 WHERE Url = ?';
+                    db.run(sql, [filePath], function (err) {
+                        if (err) {
+                            return console.log(err.message);
+                        }
+                        console.log('Increment');
+                    });
+                }
+                else {
+
+                    let parsed = JSON.parse(data);
+
+                    console.log(data);
+                    console.log(parsed);
+
+                    let sql = 'INSERT INTO Functions (TF, Kamera, Timestamp) VALUES(?, ?, ?)';
+                    db.run(sql, [data.bumps, data.camera, parsed.time], function (err) {
+                        if (err) {
+                            return console.log(err.message);
+                        }
+                        console.log('A row has been inserted!');
+                    });
+
+
+                }
+
+                /*
                 let sql = 'INSERT INTO Volumes (Title) VALUES(?)';
                 db.run(sql, [filePath], function (err) {
                     if (err) {
@@ -133,6 +167,8 @@ http.createServer(function(request, response) {
                     }
                     console.log('A row has been inserted!');
                 });
+                */
+
                 db.close();
             }
         })

@@ -16,6 +16,7 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/terier/vpt#readme",
   "dependencies": {
+    "crypto": "^1.0.1",
     "express": "^4.17.1",
     "sqlite3": "^5.0.2",
     "typize": "^1.0.0"

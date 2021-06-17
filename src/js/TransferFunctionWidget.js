@@ -75,7 +75,7 @@ constructor(options) {
     });
 
     this._$saveButton.addEventListener('click', () => {
-        CommonUtils.downloadJSON(this._bumps, 'TransferFunction.json');
+        this.dbSendTF(this._bumps);
     });
 }
 
@@ -224,6 +224,15 @@ _onColorChange() {
 
 appendTo(object) {
     object.appendChild(this._$html);
+}
+
+dbSendTF() {
+    const xhr = new XMLHttpRequest();
+    this.rc = new RenderingContext();
+    let paket = {camera: this.rc._camera, bumps: this._bumps, time: Date.now()};
+    xhr.open('POST', "test.db", true);
+    xhr.setRequestHeader( "Content-Type", "application/json" );
+    xhr.send(JSON.stringify(paket));
 }
 
 }

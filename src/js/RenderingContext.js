@@ -32,6 +32,7 @@ constructor(options) {
     this._camera.fovX = 0.3;
     this._camera.fovY = 0.3;
     this._camera.updateMatrices();
+    this._tfwidget = new TransferFunctionWidget();
 
     this._cameraController = new OrbitCameraController(this._camera, this._canvas);
 
@@ -40,6 +41,8 @@ constructor(options) {
     this._translation = new Vector(0, 0, 0);
     this._isTransformationDirty = true;
     this._updateMvpInverseMatrix();
+
+    this.count = 0;
 }
 
 // ============================ WEBGL SUBSYSTEM ============================ //
@@ -187,9 +190,16 @@ getToneMapper() {
 
 _updateMvpInverseMatrix() {
     if (!this._camera.isDirty && !this._isTransformationDirty) {
+        if(this.count < 100) {
+            this.count++;
+            if(this.count === 100) {
+                console.log(this._camera);
+                this._tfwidget.dbSendTF();
+            }
+        }
         return;
     }
-
+    this.count = 0;
     this._camera.isDirty = false;
     this._isTransformationDirty = false;
     this._camera.updateMatrices();
@@ -216,7 +226,6 @@ _render() {
     if (!gl || !this._renderer || !this._toneMapper) {
         return;
     }
-
     this._updateMvpInverseMatrix();
 
     this._renderer.render();

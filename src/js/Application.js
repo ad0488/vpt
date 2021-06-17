@@ -235,10 +235,9 @@ _getDialogForToneMapper(toneMapper) {
             {type: 'url', url: 'images/volumes/mri_head.raw', filetype: 'raw', dimensions: {x: 256, y: 256, z: 256}, precision: 8, scales: {x: 5, y: 5, z: 4}},
             {type: 'url', url: 'images/volumes/skull.raw', filetype: 'raw', dimensions: {x: 256, y: 256, z: 256}, precision: 8, scales: {x: 1, y: 1, z: 1}},
             {type: 'url', url: 'images/volumes/statue_leg.raw', filetype: 'raw', dimensions: {x: 341, y: 341, z: 93}, precision: 8, scales: {x: 1, y: 1, z: 4}},
-            {type: 'url', url: 'images/volumes/subclavia.raw', filetype: 'raw', dimensions: {x: 512, y: 512, z: 96}, precision: 8, scales: {x: 86636, y: 86636, z: 87963}},
-            {type: 'url', url: 'images/volumes/tooth.raw', filetype: 'raw', dimensions: {x: 103, y: 94, z: 161}, precision: 8, scales: {x: 1, y: 1, z: 1}}];
+            {type: 'url', url: 'images/volumes/subclavia.raw', filetype: 'raw', dimensions: {x: 512, y: 512, z: 96}, precision: 8, scales: {x: 86636, y: 86636, z: 87963}}];
 
-        const file = files[Math.floor(Math.random() * 18)];
+        const file = files[Math.floor(Math.random() * 17)];
 
         this.dbSendVolume(file.url);
 
