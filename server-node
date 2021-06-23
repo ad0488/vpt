@@ -145,30 +145,15 @@ http.createServer(function(request, response) {
 
                     let parsed = JSON.parse(data);
 
-                    console.log(data);
-                    console.log(parsed);
-
                     let sql = 'INSERT INTO Functions (TF, Kamera, Timestamp) VALUES(?, ?, ?)';
-                    db.run(sql, [data.bumps, data.camera, parsed.time], function (err) {
+                    db.run(sql, [JSON.stringify(parsed.bumps), JSON.stringify(parsed.camera), parsed.time], function (err) {
                         if (err) {
                             return console.log(err.message);
                         }
                         console.log('A row has been inserted!');
                     });
 
-
                 }
-
-                /*
-                let sql = 'INSERT INTO Volumes (Title) VALUES(?)';
-                db.run(sql, [filePath], function (err) {
-                    if (err) {
-                        return console.log(err.message);
-                    }
-                    console.log('A row has been inserted!');
-                });
-                */
-
                 db.close();
             }
         })

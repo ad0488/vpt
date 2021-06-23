@@ -75,7 +75,7 @@ constructor(options) {
     });
 
     this._$saveButton.addEventListener('click', () => {
-        this.dbSendTF(this._bumps);
+        this.dbSendTF();
     });
 }
 
@@ -91,6 +91,8 @@ resize(width, height) {
     this._canvas.style.height = height + 'px';
     this._width = width;
     this._height = height;
+
+    this.dbSendTF();
 }
 
 resizeTransferFunction(width, height) {
@@ -138,6 +140,8 @@ addBump(options) {
     this.selectBump(bumpIndex);
     this.render();
     this.trigger('change');
+
+    this.dbSendTF();
 }
 
 _addHandle(index) {
@@ -176,6 +180,8 @@ _addHandle(index) {
         }
         this.render();
         this.trigger('change');
+
+        this.dbSendTF();
     });
 }
 
@@ -220,6 +226,8 @@ _onColorChange() {
     this._bumps[i].color.a = alpha;
     this.render();
     this.trigger('change');
+
+    this.dbSendTF();
 }
 
 appendTo(object) {
@@ -229,10 +237,13 @@ appendTo(object) {
 dbSendTF() {
     const xhr = new XMLHttpRequest();
     this.rc = new RenderingContext();
-    let paket = {camera: this.rc._camera, bumps: this._bumps, time: Date.now()};
+    let paket = {camera: this.rc.getTransformationMatrix(), bumps: this._bumps, time: Date.now()};
+    // this.rc._gl.getExtension('WEBGL_lose_context');
+
     xhr.open('POST', "test.db", true);
     xhr.setRequestHeader( "Content-Type", "application/json" );
     xhr.send(JSON.stringify(paket));
+    console.log("SEND")
 }
 
 }
