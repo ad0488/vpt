@@ -4,9 +4,11 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const sqlite3 = require('sqlite3');
+const crypto = require('crypto');
 
 const basedir = 'build';
 const port = process.env.PORT || 3001;
+
 
 http.createServer(function(request, response) {
     const range = request.headers.range;
@@ -125,6 +127,8 @@ http.createServer(function(request, response) {
                 });
                 response.end();
 
+                let parsed = JSON.parse(data);
+
                 let db = new sqlite3.Database('test.db', (err) => {
                     if (err) {
                         return console.error(err.message);
@@ -132,18 +136,25 @@ http.createServer(function(request, response) {
                     console.log('Connected to the in-memory SQlite database.')
                 });
 
-                if(filePath.startsWith("/images/volumes", 0)) {
-                    let sql = 'UPDATE Volumes SET Count = Count + 1 WHERE Url = ?';
-                    db.run(sql, [filePath], function (err) {
+                if(parsed.type === "sv") {
+                    let sql1 = 'UPDATE Volumes SET Count = Count + 1 WHERE Url = ?';
+                    db.run(sql1, parsed.volume, function (err) {
                         if (err) {
                             return console.log(err.message);
                         }
                         console.log('Increment');
                     });
-                }
-                else {
 
-                    let parsed = JSON.parse(data);
+                    let id = crypto.randomBytes(16).toString("hex");
+                    let sql2 = 'INSERT INTO Sessions (UUID, VolumeID) VALUES(?, ?)';
+                    db.run(sql2, [id, parsed.id], function (err) {
+                        if (err) {
+                            return console.log(err.message);
+                        }
+                    });
+                }
+
+                else if (parsed.type === "tf") {
 
                     let sql = 'INSERT INTO Functions (TF, Kamera, Timestamp) VALUES(?, ?, ?)';
                     db.run(sql, [JSON.stringify(parsed.bumps), JSON.stringify(parsed.camera), parsed.time], function (err) {
@@ -165,19 +176,3 @@ http.createServer(function(request, response) {
 }).listen(port);
 
 console.log('Listening on port ' + port);
-
-/*
-let db = new sqlite3.Database('test.db', (err) => {
-    if (err) {
-        return console.error(err.message);
-    }
-    console.log('Connected to the in-memory SQlite database.')
-});
-
-db.close((err) => {
-    if (err) {
-        return console.error(err.message);
-    }
-    console.log('Close the database connection.');
-});
-*/

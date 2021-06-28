@@ -19,7 +19,8 @@
     "crypto": "^1.0.1",
     "express": "^4.17.1",
     "sqlite3": "^5.0.2",
-    "typize": "^1.0.0"
+    "typize": "^1.0.0",
+    "uuid": "^8.3.2"
   },
   "engines": {
     "node": "12.x"

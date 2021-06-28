@@ -75,7 +75,7 @@ constructor(options) {
     });
 
     this._$saveButton.addEventListener('click', () => {
-        this.dbSendTF();
+        // this.dbSendTF();
     });
 }
 
@@ -92,7 +92,7 @@ resize(width, height) {
     this._width = width;
     this._height = height;
 
-    this.dbSendTF();
+    // this.dbSendTF();
 }
 
 resizeTransferFunction(width, height) {
@@ -141,7 +141,7 @@ addBump(options) {
     this.render();
     this.trigger('change');
 
-    this.dbSendTF();
+    // this.dbSendTF();
 }
 
 _addHandle(index) {
@@ -181,7 +181,7 @@ _addHandle(index) {
         this.render();
         this.trigger('change');
 
-        this.dbSendTF();
+
     });
 }
 
@@ -227,23 +227,11 @@ _onColorChange() {
     this.render();
     this.trigger('change');
 
-    this.dbSendTF();
+    // this.dbSendTF();
 }
 
 appendTo(object) {
     object.appendChild(this._$html);
-}
-
-dbSendTF() {
-    const xhr = new XMLHttpRequest();
-    this.rc = new RenderingContext();
-    let paket = {camera: this.rc.getTransformationMatrix(), bumps: this._bumps, time: Date.now()};
-    // this.rc._gl.getExtension('WEBGL_lose_context');
-
-    xhr.open('POST', "test.db", true);
-    xhr.setRequestHeader( "Content-Type", "application/json" );
-    xhr.send(JSON.stringify(paket));
-    console.log("SEND")
 }
 
 }

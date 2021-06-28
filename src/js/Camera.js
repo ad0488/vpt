@@ -2,9 +2,10 @@
 
 // #include math
 
-class Camera {
+class Camera extends EventEmitter {
 
 constructor(options) {
+    super();
     Object.assign(this, {
         fovX       : 1,
         fovY       : 1,

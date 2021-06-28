@@ -237,16 +237,21 @@ _getDialogForToneMapper(toneMapper) {
             {type: 'url', url: 'images/volumes/statue_leg.raw', filetype: 'raw', dimensions: {x: 341, y: 341, z: 93}, precision: 8, scales: {x: 1, y: 1, z: 4}},
             {type: 'url', url: 'images/volumes/subclavia.raw', filetype: 'raw', dimensions: {x: 512, y: 512, z: 96}, precision: 8, scales: {x: 86636, y: 86636, z: 87963}}];
 
-        const file = files[Math.floor(Math.random() * 17)];
+        const rand = Math.floor(Math.random() * 17);
+        const file = files[rand];
 
-        this.dbSendVolume(file.url);
+        this.dbSendVolume(file.url, "session", rand + 1);
 
         return file;
     }
 
-    dbSendVolume(volume) {
+    dbSendVolume(volume, session, rand) {
+
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', volume, true);
-        xhr.send(volume);
+        let paket = {type: "sv", volume: volume, id: rand};
+        xhr.open('POST', "test.db", true);
+        xhr.setRequestHeader( "Content-Type", "application/json" );
+        xhr.send(JSON.stringify(paket));
+
     }
 }
