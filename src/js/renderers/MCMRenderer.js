@@ -23,6 +23,7 @@ constructor(gl, volume, environmentTexture, options) {
         render    : SHADERS.MCMRender,
         reset     : SHADERS.MCMReset
     }, MIXINS);
+
 }
 
 destroy() {

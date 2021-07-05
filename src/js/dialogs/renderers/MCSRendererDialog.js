@@ -14,12 +14,14 @@ constructor(renderer, options) {
 
     this._handleChange = this._handleChange.bind(this);
     this._handleTFChange = this._handleTFChange.bind(this);
+    this._handleEventDB = this._handleEventDB.bind(this);
 
     this._binds.extinction.addEventListener('input', this._handleChange);
 
     this._tfwidget = new TransferFunctionWidget();
     this._binds.tfcontainer.add(this._tfwidget);
     this._tfwidget.addEventListener('change', this._handleTFChange);
+
 }
 
 destroy() {

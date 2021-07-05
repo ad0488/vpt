@@ -9,19 +9,19 @@
 // #include ui
 // #include RenderingContext.js
 
-//import { createRequire } from 'module';
-//const require = createRequire(import.meta.url);
-
 class Application {
 
-    // sqlite3 = require('sqlite3').verbose();
+    vol_id = 0;
 
 constructor() {
+    this._communicator = new Communicator();
     this._handleFileDrop = this._handleFileDrop.bind(this);
     this._handleRendererChange = this._handleRendererChange.bind(this);
     this._handleToneMapperChange = this._handleToneMapperChange.bind(this);
     this._handleVolumeLoad = this._handleVolumeLoad.bind(this);
     this._handleEnvmapLoad = this._handleEnvmapLoad.bind(this);
+    this.handleSendTF = this.handleSendTF.bind(this);
+    this.handleSendTFFinal = this.handleSendTFFinal.bind(this);
 
     this._renderingContext = new RenderingContext();
     this._canvas = this._renderingContext.getCanvas();
@@ -52,9 +52,9 @@ constructor() {
 
     // this._volumeLoadDialog.addEventListener('load', this._handleVolumeLoad);
 
-    this._handleVolumeLoad(
-        this.getRandomFile()
-    );
+    this._loaded = this.getRandomFile();
+
+    this._handleVolumeLoad(this._loaded);
 
     /*
     this._envmapLoadDialog = new EnvmapLoadDialog();
@@ -82,7 +82,6 @@ constructor() {
     this._mainDialog.addEventListener('tonemapperchange', this._handleToneMapperChange);
     this._mainDialog.trigger('rendererchange', this._mainDialog.getSelectedRenderer());
     this._mainDialog.trigger('tonemapperchange', "artistic");
-
 
 }
 
@@ -115,6 +114,8 @@ _handleRendererChange(which) {
     const dialogClass = this._getDialogForRenderer(which);
     this._rendererDialog = new dialogClass(renderer);
     this._rendererDialog.appendTo(container);
+    this._rendererDialog.addEventListener('sendfw', this.handleSendTF);
+    this._rendererDialog.addEventListener('sendfwfinal', this.handleSendTFFinal);
 }
 
 _handleToneMapperChange(which) {
@@ -163,7 +164,7 @@ _handleVolumeLoad(options) {
                 depth  : options.dimensions.z,
                 bits   : options.precision
             });
-            console.log(options.dimensions);
+            // console.log(options.dimensions);
 
             this._renderingContext.stopRendering();
             this._renderingContext.setVolume(reader);
@@ -238,6 +239,7 @@ _getDialogForToneMapper(toneMapper) {
             {type: 'url', url: 'images/volumes/subclavia.raw', filetype: 'raw', dimensions: {x: 512, y: 512, z: 96}, precision: 8, scales: {x: 86636, y: 86636, z: 87963}}];
 
         const rand = Math.floor(Math.random() * 17);
+        this.vol_id = rand;
         const file = files[rand];
 
         this.dbSendVolume(file.url, "session", rand + 1);
@@ -254,4 +256,14 @@ _getDialogForToneMapper(toneMapper) {
         xhr.send(JSON.stringify(paket));
 
     }
+
+    handleSendTF() {
+
+        this._communicator.dbSendTF(this._renderingContext._camera.transformationMatrix, this._rendererDialog._tfwidget._bumps, this._loaded.url, this.vol_id + 1, 0);
+    }
+    handleSendTFFinal() {
+
+        this._communicator.dbSendTF(this._renderingContext._camera.transformationMatrix, this._rendererDialog._tfwidget._bumps, this._loaded.url, this.vol_id + 1, 1);
+    }
+
 }

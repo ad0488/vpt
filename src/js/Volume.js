@@ -69,7 +69,7 @@ readModality(modalityName, handlers) {
         format = gl.RED;
     }
     gl.texStorage3D(gl.TEXTURE_3D, 1, internalFormat, dimensions.width, dimensions.height, dimensions.depth);
-    console.log(dimensions);
+    // console.log(dimensions);
     let remainingBlocks = modality.placements.length;
     /*
     const hist = new Array(256 * 256).fill(0);

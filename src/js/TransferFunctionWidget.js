@@ -75,7 +75,7 @@ constructor(options) {
     });
 
     this._$saveButton.addEventListener('click', () => {
-        // this.dbSendTF();
+        this.trigger('sendfinal', this._bumps);
     });
 }
 
@@ -92,6 +92,8 @@ resize(width, height) {
     this._width = width;
     this._height = height;
 
+    this.trigger('change');
+    this.trigger('send');
     // this.dbSendTF();
 }
 
@@ -140,6 +142,7 @@ addBump(options) {
     this.selectBump(bumpIndex);
     this.render();
     this.trigger('change');
+    this.trigger('send');
 
     // this.dbSendTF();
 }
@@ -180,9 +183,13 @@ _addHandle(index) {
         }
         this.render();
         this.trigger('change');
+        this.trigger('send');
 
 
     });
+    $handle.addEventListener('draggableend', e => {
+        this.trigger('send');
+    })
 }
 
 _rebuildHandles() {
@@ -226,6 +233,7 @@ _onColorChange() {
     this._bumps[i].color.a = alpha;
     this.render();
     this.trigger('change');
+    this.trigger('send');
 
     // this.dbSendTF();
 }

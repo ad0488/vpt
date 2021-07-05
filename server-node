@@ -8,7 +8,9 @@ const crypto = require('crypto');
 
 const basedir = 'build';
 const port = process.env.PORT || 3001;
-
+let id = crypto.randomBytes(16).toString("hex");
+let volumeid = 0;
+let sessionid = 0;
 
 http.createServer(function(request, response) {
     const range = request.headers.range;
@@ -145,19 +147,28 @@ http.createServer(function(request, response) {
                         console.log('Increment');
                     });
 
-                    let id = crypto.randomBytes(16).toString("hex");
                     let sql2 = 'INSERT INTO Sessions (UUID, VolumeID) VALUES(?, ?)';
                     db.run(sql2, [id, parsed.id], function (err) {
                         if (err) {
                             return console.log(err.message);
                         }
                     });
+
+                    volumeid = parsed.id;
+
+                    let sql3 = 'SELECT Id id FROM Sessions WHERE UUID = ?';
+                    db.get(sql3, [id], function (err, row) {
+                        if (err) {
+                            return console.log(err.message);
+                        }
+                        sessionid = row.id;
+                    });
                 }
 
                 else if (parsed.type === "tf") {
 
-                    let sql = 'INSERT INTO Functions (TF, Kamera, Timestamp) VALUES(?, ?, ?)';
-                    db.run(sql, [JSON.stringify(parsed.bumps), JSON.stringify(parsed.camera), parsed.time], function (err) {
+                    let sql = 'INSERT INTO Functions (TF, Kamera, Timestamp, SessionID, VolumeID, Final) VALUES(?, ?, ?, ?, ?, ?)';
+                    db.run(sql, [JSON.stringify(parsed.bumps), JSON.stringify(parsed.camera), parsed.time, sessionid, volumeid, parsed.final_tf], function (err) {
                         if (err) {
                             return console.log(err.message);
                         }

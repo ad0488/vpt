@@ -4,7 +4,6 @@ class Draggable {
 
 constructor(element, handle) {
 
-    this._tfwidget = new TransferFunctionWidget();
     this._handleMouseDown = this._handleMouseDown.bind(this);
     this._handleMouseUp = this._handleMouseUp.bind(this);
     this._handleMouseMove = this._handleMouseMove.bind(this);
@@ -15,7 +14,6 @@ constructor(element, handle) {
     this._startY = 0;
 
     this._handle.addEventListener('mousedown', this._handleMouseDown);
-
 }
 
 _handleMouseDown(e) {
@@ -36,6 +34,7 @@ _handleMouseDown(e) {
 }
 
 _handleMouseUp(e) {
+
     document.removeEventListener('mousemove', this._handleMouseMove);
     document.removeEventListener('mouseup', this._handleMouseUp);
     this._handle.addEventListener('mousedown', this._handleMouseDown);
@@ -48,7 +47,6 @@ _handleMouseUp(e) {
     });
     this._element.dispatchEvent(event);
 
-    this._tfwidget.dbSendTF();
 }
 
 _handleMouseMove(e) {
