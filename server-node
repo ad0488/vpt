@@ -131,7 +131,7 @@ http.createServer(function(request, response) {
 
                 let parsed = JSON.parse(data);
 
-                let db = new sqlite3.Database('test.db', (err) => {
+                let db = new sqlite3.Database('build/test.db', (err) => {
                     if (err) {
                         return console.error(err.message);
                     }
