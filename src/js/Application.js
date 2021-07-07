@@ -251,7 +251,7 @@ _getDialogForToneMapper(toneMapper) {
 
         const xhr = new XMLHttpRequest();
         let paket = {type: "sv", volume: volume, id: rand};
-        xhr.open('POST', "../test.db", true);
+        xhr.open('POST', '../test.db', true);
         xhr.setRequestHeader( "Content-Type", "application/json" );
         xhr.send(JSON.stringify(paket));
 
