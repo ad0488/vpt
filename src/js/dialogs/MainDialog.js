@@ -50,6 +50,7 @@ getRenderingContextSettingsContainer() {
 }
 
 getSelectedRenderer() {
+    console.log(this._binds.rendererSelect.getValue());
     return this._binds.rendererSelect.getValue();
 }
 

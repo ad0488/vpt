@@ -131,7 +131,7 @@ http.createServer(function(request, response) {
 
                 let parsed = JSON.parse(data);
 
-                let db = new sqlite3.Database('build/test.db', (err) => {
+                let db = new sqlite3.Database('test.db', (err) => {
                     if (err) {
                         return console.error(err.message);
                     }
@@ -167,8 +167,8 @@ http.createServer(function(request, response) {
 
                 else if (parsed.type === "tf") {
 
-                    let sql = 'INSERT INTO Functions (TF, Kamera, Timestamp, SessionID, VolumeID, Final) VALUES(?, ?, ?, ?, ?, ?)';
-                    db.run(sql, [JSON.stringify(parsed.bumps), JSON.stringify(parsed.camera), parsed.time, sessionid, volumeid, parsed.final_tf], function (err) {
+                    let sql = 'INSERT INTO Functions (TF, Kamera, Timestamp, SessionID, VolumeID) VALUES(?, ?, ?, ?, ?)';
+                    db.run(sql, [JSON.stringify(parsed.bumps), JSON.stringify(parsed.camera), parsed.time, sessionid, volumeid], function (err) {
                         if (err) {
                             return console.log(err.message);
                         }

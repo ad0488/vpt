@@ -28,6 +28,7 @@ constructor(options) {
     this._$colorPicker   = this._$html.querySelector('[name="color"]');
     this._$alphaPicker   = this._$html.querySelector('[name="alpha"]');
     this._$addBumpButton = this._$html.querySelector('[name="add-bump"]');
+    this._$deleteBumpButton = this._$html.querySelector('[name="delete-bump"]');
     this._$loadButton    = this._$html.querySelector('[name="load"]');
     this._$saveButton    = this._$html.querySelector('[name="save"]');
 
@@ -75,7 +76,14 @@ constructor(options) {
     });
 
     this._$saveButton.addEventListener('click', () => {
-        this.trigger('sendfinal', this._bumps);
+        CommonUtils.downloadJSON(this._bumps, 'TransferFunction.json');
+    });
+    this._$deleteBumpButton.addEventListener('click', () => {
+        this._bumps.pop();
+        this.render();
+        this._rebuildHandles();
+        this.trigger('change');
+        this.trigger('send');
     });
 }
 
@@ -164,6 +172,11 @@ _addHandle(index) {
         const i = parseInt(DOMUtils.data(e.currentTarget, 'index'));
         this._bumps[i].position.x = x;
         this._bumps[i].position.y = y;
+        /*
+        if(this._bumps[i].position.x < 0 || this._bumps[i].position.x > 1 || this._bumps[i].position.y < 0 || this._bumps[i].position.y > 1 ) {
+            this._correctBumps(i);
+        }
+        */
         this.render();
         this.trigger('change');
     });
@@ -240,6 +253,22 @@ _onColorChange() {
 
 appendTo(object) {
     object.appendChild(this._$html);
+}
+
+_correctBumps(i) {
+    if (this._bumps[i].position.x < 0) {
+        this._bumps[i].position.x = 0.05;
+    }
+    else if (this._bumps[i].position.y < 0) {
+        this._bumps[i].position.y = 0.05;
+    }
+    else if (this._bumps[i].position.x > 1) {
+        this._bumps[i].position.x = 0.95;
+    }
+    else if (this._bumps[i].position.y > 1) {
+        this._bumps[i].position.y = 0.95;
+    }
+    // this._rebuildHandles();
 }
 
 }

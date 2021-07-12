@@ -7,10 +7,10 @@ class Communicator {
     }
 
 
-    dbSendTF(camera, bumps, volume, vol_id, final) {
+    dbSendTF(camera, bumps, volume, vol_id) {
 
         const xhr = new XMLHttpRequest();
-        let paket = {type: "tf", camera: camera, bumps: bumps, volume: volume, time: Date.now(), vol_id: vol_id, final_tf: final};
+        let paket = {type: "tf", camera: camera, bumps: bumps, volume: volume, time: Date.now(), vol_id: vol_id};
 
         // console.log(paket);
 

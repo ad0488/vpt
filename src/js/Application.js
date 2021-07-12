@@ -21,7 +21,6 @@ constructor() {
     this._handleVolumeLoad = this._handleVolumeLoad.bind(this);
     this._handleEnvmapLoad = this._handleEnvmapLoad.bind(this);
     this.handleSendTF = this.handleSendTF.bind(this);
-    this.handleSendTFFinal = this.handleSendTFFinal.bind(this);
 
     this._renderingContext = new RenderingContext();
     this._canvas = this._renderingContext.getCanvas();
@@ -80,8 +79,9 @@ constructor() {
 
     this._mainDialog.addEventListener('rendererchange', this._handleRendererChange);
     this._mainDialog.addEventListener('tonemapperchange', this._handleToneMapperChange);
-    this._mainDialog.trigger('rendererchange', this._mainDialog.getSelectedRenderer());
+    this._mainDialog.trigger('rendererchange', 'mcm');
     this._mainDialog.trigger('tonemapperchange', "artistic");
+
 
 }
 
@@ -115,7 +115,6 @@ _handleRendererChange(which) {
     this._rendererDialog = new dialogClass(renderer);
     this._rendererDialog.appendTo(container);
     this._rendererDialog.addEventListener('sendfw', this.handleSendTF);
-    this._rendererDialog.addEventListener('sendfwfinal', this.handleSendTFFinal);
 }
 
 _handleToneMapperChange(which) {
@@ -259,11 +258,7 @@ _getDialogForToneMapper(toneMapper) {
 
     handleSendTF() {
 
-        this._communicator.dbSendTF(this._renderingContext._camera.transformationMatrix, this._rendererDialog._tfwidget._bumps, this._loaded.url, this.vol_id + 1, 0);
-    }
-    handleSendTFFinal() {
-
-        this._communicator.dbSendTF(this._renderingContext._camera.transformationMatrix, this._rendererDialog._tfwidget._bumps, this._loaded.url, this.vol_id + 1, 1);
+        this._communicator.dbSendTF(this._renderingContext._camera.transformationMatrix, this._rendererDialog._tfwidget._bumps, this._loaded.url, this.vol_id + 1);
     }
 
 }
