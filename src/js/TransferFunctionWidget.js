@@ -15,6 +15,7 @@ constructor(options) {
     super();
 
     this._onColorChange = this._onColorChange.bind(this);
+    this.deleteBump = this.deleteBump.bind(this);
 
     Object.assign(this, {
         _width                  : 256,
@@ -46,7 +47,8 @@ constructor(options) {
     const gl = this._gl;
 
     gl.enable(gl.BLEND);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+    // gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE);
 
     this._clipQuad = WebGL.createClipQuad(gl);
     this._program = WebGL.buildPrograms(gl, {
@@ -79,12 +81,9 @@ constructor(options) {
         CommonUtils.downloadJSON(this._bumps, 'TransferFunction.json');
     });
     this._$deleteBumpButton.addEventListener('click', () => {
-        this._bumps.pop();
-        this.render();
-        this._rebuildHandles();
-        this.trigger('change');
-        this.trigger('send');
+        this.deleteBump(46);
     });
+    window.addEventListener("keydown", this.deleteBump, true);
 }
 
 destroy() {
@@ -151,8 +150,6 @@ addBump(options) {
     this.render();
     this.trigger('change');
     this.trigger('send');
-
-    // this.dbSendTF();
 }
 
 _addHandle(index) {
@@ -172,11 +169,7 @@ _addHandle(index) {
         const i = parseInt(DOMUtils.data(e.currentTarget, 'index'));
         this._bumps[i].position.x = x;
         this._bumps[i].position.y = y;
-        /*
-        if(this._bumps[i].position.x < 0 || this._bumps[i].position.x > 1 || this._bumps[i].position.y < 0 || this._bumps[i].position.y > 1 ) {
-            this._correctBumps(i);
-        }
-        */
+
         this.render();
         this.trigger('change');
     });
@@ -255,20 +248,16 @@ appendTo(object) {
     object.appendChild(this._$html);
 }
 
-_correctBumps(i) {
-    if (this._bumps[i].position.x < 0) {
-        this._bumps[i].position.x = 0.05;
+deleteBump(e) {
+    if(e.keyCode === 46 || e === 46) {
+        const $selectedBump = this._$html.querySelector('.bump.selected');
+        const i = parseInt(DOMUtils.data($selectedBump, 'index'));
+        this._bumps.splice(i, 1);
+        this.render();
+        this._rebuildHandles();
+        this.trigger('change');
+        this.trigger('send');
     }
-    else if (this._bumps[i].position.y < 0) {
-        this._bumps[i].position.y = 0.05;
-    }
-    else if (this._bumps[i].position.x > 1) {
-        this._bumps[i].position.x = 0.95;
-    }
-    else if (this._bumps[i].position.y > 1) {
-        this._bumps[i].position.y = 0.95;
-    }
-    // this._rebuildHandles();
 }
 
 }
