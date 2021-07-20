@@ -120,7 +120,7 @@ http.createServer(function(request, response) {
                     response.end('Server error: ' + error.code);
                 }
             } else {
-                /*
+
                 response.writeHead(200, {
                     'Content-Type': contentType,
                     'Content-Length': stat.size,
@@ -130,7 +130,7 @@ http.createServer(function(request, response) {
                 });
                 response.end();
 
-                 */
+
 
                 let parsed = JSON.parse(data);
 

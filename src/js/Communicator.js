@@ -12,8 +12,6 @@ class Communicator {
         const xhr = new XMLHttpRequest();
         let paket = {type: "tf", camera: camera, bumps: bumps, volume: volume, time: Date.now(), vol_id: vol_id};
 
-        // console.log(paket);
-
         xhr.open('POST', '../../test.db', true);
         xhr.setRequestHeader( "Content-Type", "application/json" );
         xhr.send(JSON.stringify(paket));
