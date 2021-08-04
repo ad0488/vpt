@@ -129,10 +129,25 @@ _handleVolumeLoad(options) {
             this._renderingContext.setVolume(reader);
         }
     } else if (options.type === 'url') {
+        const vol = options.dimensions;
+        const vox = options.scales;
+
+        const x = vol.x * vox.x;
+        const z = vol.z * vox.z;
+        const y = vol.y * vox.y;
+        const max = Math.max(x, y, z);
+        this._renderingContext.setScale(x / max, y / max, z / max);
         const readerClass = this._getReaderForFileType(options.filetype);
         if (readerClass) {
             const loader = new AjaxLoader(options.url);
-            const reader = new readerClass(loader);
+            const reader = new readerClass(loader, {
+                width  : options.dimensions.x,
+                height : options.dimensions.y,
+                depth  : options.dimensions.z,
+                bits   : options.precision
+            });
+            // console.log(options.dimensions);
+
             this._renderingContext.stopRendering();
             this._renderingContext.setVolume(reader);
         }

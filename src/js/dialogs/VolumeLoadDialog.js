@@ -99,7 +99,10 @@ _handleLoadDemo() {
     this.trigger('load', {
         type     : 'url',
         url      : found.url,
-        filetype : filetype
+        filetype : filetype,
+        dimensions: found.dimensions,
+        precision: found.precision,
+        scales: found.scales
     });
 }
 
