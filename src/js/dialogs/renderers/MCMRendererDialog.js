@@ -14,6 +14,7 @@ constructor(renderer, options) {
 
     this._handleChange = this._handleChange.bind(this);
     this._handleTFChange = this._handleTFChange.bind(this);
+    this._toolHandleEvent = this._toolHandleEvent.bind(this);
 
     this._binds.extinction.addEventListener('input', this._handleChange);
     this._binds.albedo.addEventListener('change', this._handleChange);
@@ -25,6 +26,8 @@ constructor(renderer, options) {
     this._tfwidget = new TransferFunctionWidget();
     this._binds.tfcontainer.add(this._tfwidget);
     this._tfwidget.addEventListener('change', this._handleTFChange);
+    this._tfwidget.addEventListener('tool', this._toolHandleEvent);
+
 }
 
 destroy() {
@@ -53,6 +56,10 @@ _handleChange() {
 _handleTFChange() {
     this._renderer.setTransferFunction(this._tfwidget.getTransferFunction());
     this._renderer.reset();
+}
+
+_toolHandleEvent() {
+    this.trigger('tool');
 }
 
 }

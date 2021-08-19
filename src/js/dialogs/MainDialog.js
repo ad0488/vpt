@@ -4,6 +4,7 @@
 // #include AbstractDialog.js
 
 // #include ../../uispecs/MainDialog.json
+// #include ../../html/Tools.html
 // #include ../../html/AboutText.html
 
 class MainDialog extends AbstractDialog {
@@ -18,10 +19,10 @@ constructor(options) {
     this._binds.rendererSelect.addEventListener('change', this._handleRendererChange);
     this._binds.toneMapperSelect.addEventListener('change', this._handleToneMapperChange);
 
-
+    /*
     const tools = DOMUtils.instantiate(TEMPLATES.Tools);
     this._binds.tools._element.appendChild(tools);
-
+    */
 
     const about = DOMUtils.instantiate(TEMPLATES.AboutText);
     this._binds.about._element.appendChild(about);

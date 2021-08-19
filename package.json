@@ -2,7 +2,7 @@
   "name": "vpt",
   "version": "1.0.0",
   "description": "Volumetric Path Tracing",
-  "main": "bin/server-express",
+  "main": "server-express",
   "scripts": {
     "build": "bin/packer",
     "start": "bin/server-express",
@@ -16,7 +16,8 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/terier/vpt#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "python-shell": "^3.0.0"
   },
   "engines": {
     "node": "12.x"

@@ -49,8 +49,14 @@ _handleMouseUp(e) {
 _handleMouseMove(e) {
     const dx = e.pageX - this._startX;
     const dy = e.pageY - this._startY;
-    const x = this._element.offsetLeft;
-    const y = this._element.offsetTop;
+    let x = this._element.offsetLeft;
+    let y = this._element.offsetTop;
+
+    if(x > 256 || y > 256 || x < 1 || y < 1) {
+        x = this._correctHandle(x);
+        y = this._correctHandle(y);
+    }
+
     this._element.style.left = (x + dx) + 'px';
     this._element.style.top = (y + dy) + 'px';
     this._startX = e.pageX;
@@ -63,6 +69,16 @@ _handleMouseMove(e) {
         }
     });
     this._element.dispatchEvent(event);
+}
+
+_correctHandle(a) {
+    if (a > 256) {
+        a = 256;
+    }
+    if (a < 1) {
+        a = 1;
+    }
+    return a;
 }
 
 }

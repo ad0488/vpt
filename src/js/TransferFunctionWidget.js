@@ -9,12 +9,18 @@
 // #include ../html/TransferFunctionWidgetBumpHandle.html
 // #include ../css/TransferFunctionWidget.css
 
+// #include ../html/Tools.html
+// #include ../css/Tools.css
+
 class TransferFunctionWidget extends EventEmitter {
 
 constructor(options) {
     super();
 
     this._onColorChange = this._onColorChange.bind(this);
+    this.deleteBump = this.deleteBump.bind(this);
+    this.applyNewBumps = this.applyNewBumps.bind(this);
+    this.addSpecificBump = this.addSpecificBump.bind(this);
 
     Object.assign(this, {
         _width                  : 256,
@@ -28,8 +34,16 @@ constructor(options) {
     this._$colorPicker   = this._$html.querySelector('[name="color"]');
     this._$alphaPicker   = this._$html.querySelector('[name="alpha"]');
     this._$addBumpButton = this._$html.querySelector('[name="add-bump"]');
+    this._$deleteBumpButton = this._$html.querySelector('[name="delete-bump"]');
     this._$loadButton    = this._$html.querySelector('[name="load"]');
     this._$saveButton    = this._$html.querySelector('[name="save"]');
+
+    // this._$pbs = DOMUtils.instantiate(TEMPLATES.Tools);
+    this._$pb1 = this._$html.querySelector('[name="pb1"]');
+    this._$pb2 = this._$html.querySelector('[name="pb2"]');
+    this._$pb3 = this._$html.querySelector('[name="pb3"]');
+    this._$pb4 = this._$html.querySelector('[name="pb4"]');
+    this._$pb5 = this._$html.querySelector('[name="pb5"]');
 
     this._canvas = this._$html.querySelector('canvas');
     this._canvas.width = this._transferFunctionWidth;
@@ -45,7 +59,7 @@ constructor(options) {
     const gl = this._gl;
 
     gl.enable(gl.BLEND);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 
     this._clipQuad = WebGL.createClipQuad(gl);
     this._program = WebGL.buildPrograms(gl, {
@@ -58,6 +72,7 @@ constructor(options) {
     gl.vertexAttribPointer(program.attributes.aPosition, 2, gl.FLOAT, false, 0, 0);
 
     this._bumps = [];
+    this._newbumps = [];
     this._$addBumpButton.addEventListener('click', () => {
         this.addBump();
     });
@@ -77,6 +92,57 @@ constructor(options) {
     this._$saveButton.addEventListener('click', () => {
         CommonUtils.downloadJSON(this._bumps, 'TransferFunction.json');
     });
+
+    this._$deleteBumpButton.addEventListener('click', () => {
+        this.deleteBump(46);
+    });
+
+    this._$pb1.addEventListener('click', () => {
+        if(this._newbumps.length === 0) {
+            alert("No bumps to generate from");
+        }
+        else {
+            this.addSpecificBump(this._newbumps[0][0], 1);
+        }
+    });
+
+    this._$pb2.addEventListener('click', () => {
+        if(this._newbumps.length === 0) {
+            alert("No bumps to generate from");
+        }
+        else {
+            this.addSpecificBump(this._newbumps[0][1], 2);
+        }
+    });
+
+    this._$pb3.addEventListener('click', () => {
+        if(this._newbumps.length === 0) {
+            alert("No bumps to generate from");
+        }
+        else {
+            this.addSpecificBump(this._newbumps[0][2], 3);
+        }
+    });
+
+    this._$pb4.addEventListener('click', () => {
+        if(this._newbumps.length === 0) {
+            alert("No bumps to generate from");
+        }
+        else {
+            this.addSpecificBump(this._newbumps[0][3], 4);
+        }
+    });
+
+    this._$pb5.addEventListener('click', () => {
+        if(this._newbumps.length === 0) {
+            alert("No bumps to generate from");
+        }
+        else {
+            this.addSpecificBump(this._newbumps[0][4], 5);
+        }
+    });
+
+    window.addEventListener("keydown", this.deleteBump, true);
 }
 
 destroy() {
@@ -91,6 +157,9 @@ resize(width, height) {
     this._canvas.style.height = height + 'px';
     this._width = width;
     this._height = height;
+
+    this.trigger('change');
+    this.trigger('tool');
 }
 
 resizeTransferFunction(width, height) {
@@ -138,6 +207,66 @@ addBump(options) {
     this.selectBump(bumpIndex);
     this.render();
     this.trigger('change');
+    this.trigger('tool');
+}
+
+addSpecificBump(bump, color) {
+    // console.log(bump);
+    const bumpIndex = this._bumps.length;
+    let cr = 0;
+    let cg = 0;
+    let cb = 0;
+    switch (color) {
+        case 1:
+            cr = 0;
+            cg = 1;
+            cb = 0;
+            break;
+        case 2:
+            cr = 0;
+            cg = 0;
+            cb = 1;
+            break;
+        case 3:
+            cr = 1;
+            cg = 0;
+            cb = 1;
+            break;
+        case 4:
+            cr = 0;
+            cg = 1;
+            cb = 1;
+            break;
+        case 5:
+            cr = 1;
+            cg = 1;
+            cb = 0;
+            break;
+    }
+    const newBump = {
+        position: {
+            x: bump[0],
+            y: bump[1]
+        },
+        size: {
+            x: bump[2],
+            y: bump[3]
+        },
+        color: {
+            r: cr,
+            g: cg,
+            b: cb,
+            a: 1
+        }
+    };
+    // console.log(newBump);
+    // this._bumps.pop();
+    this._bumps.push(newBump);
+    this._addHandle(bumpIndex);
+    this.selectBump(bumpIndex);
+    this.render();
+    this.trigger('change');
+    this.trigger('tool');
 }
 
 _addHandle(index) {
@@ -176,7 +305,11 @@ _addHandle(index) {
         }
         this.render();
         this.trigger('change');
+        this.trigger('tool');
     });
+    $handle.addEventListener('draggableend', e => {
+        this.trigger('tool');
+    })
 }
 
 _rebuildHandles() {
@@ -220,6 +353,38 @@ _onColorChange() {
     this._bumps[i].color.a = alpha;
     this.render();
     this.trigger('change');
+    this.trigger('tool');
+}
+
+deleteBump(e) {
+    if(e.keyCode === 46 || e === 46) {
+        const $selectedBump = this._$html.querySelector('.bump.selected');
+        const i = parseInt(DOMUtils.data($selectedBump, 'index'));
+        this._bumps.splice(i, 1);
+        this.render();
+        this._rebuildHandles();
+        this.trigger('change');
+        this.trigger('tool');
+    }
+}
+
+applyNewBumps(nb) {
+    // console.log(nb);
+    let ary = JSON.parse("[" + nb + "]");
+    /*
+    let na = [];
+    for(let i = 0; i < 5; i++) {
+        let nb = []
+        nb[0] = ary[0 + (i * 4)];
+        nb[1] = ary[1 + (i * 4)];
+        nb[2] = ary[2 + (i * 4)];
+        nb[3] = ary[3 + (i * 4)];
+        na[i] = nb;
+    }
+    */
+    this._newbumps = ary;
+    // console.log('newbumps = ' + this._newbumps);
+
 }
 
 appendTo(object) {

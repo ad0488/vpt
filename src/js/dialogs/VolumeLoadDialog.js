@@ -102,8 +102,15 @@ _handleLoadDemo() {
         filetype : filetype,
         dimensions: found.dimensions,
         precision: found.precision,
-        scales: found.scales
+        scales: found.scales,
+        name: found.value
     });
+
+    /*
+    this.trigger('tool', {
+       name: found.value
+    });
+    */
 }
 
 _handleTypeChange() {

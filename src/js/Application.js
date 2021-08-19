@@ -12,11 +12,16 @@
 class Application {
 
 constructor() {
+
+    this._communicator = new Communicator();
     this._handleFileDrop = this._handleFileDrop.bind(this);
     this._handleRendererChange = this._handleRendererChange.bind(this);
     this._handleToneMapperChange = this._handleToneMapperChange.bind(this);
     this._handleVolumeLoad = this._handleVolumeLoad.bind(this);
     this._handleEnvmapLoad = this._handleEnvmapLoad.bind(this);
+    this.handleSendVolume = this.handleSendVolume.bind(this);
+    this.handleSendTF = this.handleSendTF.bind(this);
+    this.handleSendBumps = this.handleSendBumps.bind(this);
 
     this._renderingContext = new RenderingContext();
     this._canvas = this._renderingContext.getCanvas();
@@ -100,6 +105,7 @@ _handleRendererChange(which) {
     const dialogClass = this._getDialogForRenderer(which);
     this._rendererDialog = new dialogClass(renderer);
     this._rendererDialog.appendTo(container);
+    this._rendererDialog.addEventListener('tool', this.handleSendTF);
 }
 
 _handleToneMapperChange(which) {
@@ -129,6 +135,8 @@ _handleVolumeLoad(options) {
             this._renderingContext.setVolume(reader);
         }
     } else if (options.type === 'url') {
+        this.handleSendVolume(options.name);
+
         const vol = options.dimensions;
         const vox = options.scales;
 
@@ -200,4 +208,20 @@ _getDialogForToneMapper(toneMapper) {
     }
 }
 
+    handleSendTF() {
+    let t = this;
+        this._communicator.toolSendTF(this._rendererDialog._tfwidget._bumps, function (back) {
+            t.handleSendBumps(back);
+        });
+    }
+
+    handleSendVolume(volume) {
+        this._communicator.toolSendVolume(volume);
+
+    }
+
+    handleSendBumps(nb) {
+    // console.log('iz here');
+        this._rendererDialog._tfwidget.applyNewBumps(nb);
+    }
 }
