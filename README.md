@@ -2,7 +2,7 @@
 
 VPT is a volumetric path tracing framework targeted towards interactive
 real-time data exploration. It works in both desktop and mobile environments.
-It is built on top of WebGL 2 with no external dependencies.
+It is built on top of WebGL 2 with no external dependencies
 
 ![VPT](src/images/screenshot.jpg)
 
