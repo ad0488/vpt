@@ -48,6 +48,7 @@
                               "label": "Isosurface extraction"
                             },
                             {
+                              "selected": true,
                               "value": "eam",
                               "label": "Emission-absorption model"
                             },
@@ -60,9 +61,12 @@
                               "label": "Single scattering"
                             },
                             {
-                              "selected": true,
                               "value": "mcm",
                               "label": "Multiple scattering"
+                            },
+                            {
+                              "value": "ueam",
+                              "label": "UEAM"
                             }
                           ]
                         }

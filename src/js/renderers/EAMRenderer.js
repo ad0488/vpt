@@ -14,7 +14,7 @@ constructor(gl, volume, environmentTexture, options) {
     this.registerProperties([
         {
             name: 'extinction',
-            label: 'Extinction',
+            label: 'X',
             type: 'spinner',
             value: 100,
             min: 0,
