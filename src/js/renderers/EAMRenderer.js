@@ -64,9 +64,10 @@ constructor(gl, volume, environmentTexture, options) {
         }
 
         if ([
-            'extinction',
+            'opacity',
             'type',
-            'slices',
+            'steps',
+            'transferFunction'
         ].includes(name)) {
             this.reset();
         }
@@ -106,10 +107,11 @@ _generateFrame() {
 
     gl.uniform1i(uniforms.uVolume, 0);
     gl.uniform1i(uniforms.uTransferFunction, 1);
-    gl.uniform1f(uniforms.uStepSize, 1 / this.slices);
-    gl.uniform1f(uniforms.uAlphaCorrection, this._alphaCorrection);
-    gl.uniform1f(uniforms.uType, this._type);
+    gl.uniform1f(uniforms.uStepSize, 1 / this.steps);
+    gl.uniform1f(uniforms.uAlphaCorrection, this.opacity);
+    gl.uniform1f(uniforms.uType, this.type);
     gl.uniform1f(uniforms.uOffset, Math.random());
+
     const mvpit = this.calculateMVPInverseTranspose();
     gl.uniformMatrix4fv(uniforms.uMvpInverseMatrix, false, mvpit.m);
 

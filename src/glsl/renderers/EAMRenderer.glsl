@@ -1,6 +1,7 @@
 // #part /glsl/shaders/renderers/EAM/generate/vertex
 
 #version 300 es
+precision mediump float;
 
 uniform mat4 uMvpInverseMatrix;
 
@@ -13,7 +14,7 @@ out vec3 vRayTo;
 
 void main() {
     unproject(aPosition, uMvpInverseMatrix, vRayFrom, vRayTo);
-    gl_Position = vec4(aPosition, 0, 1);
+    gl_Position = vec4(aPosition, 0.0, 1.0);
 }
 
 // #part /glsl/shaders/renderers/EAM/generate/fragment
@@ -25,9 +26,8 @@ uniform mediump sampler3D uVolume;
 uniform mediump sampler2D uTransferFunction;
 uniform float uStepSize;
 uniform float uOffset;
-uniform float uExtinction;
-uniform float uType;
 uniform float uAlphaCorrection;
+uniform float uType;
 
 in vec3 vRayFrom;
 in vec3 vRayTo;
@@ -43,30 +43,27 @@ void main() {
     vec3 rayDirection = vRayTo - vRayFrom;
     vec2 tbounds = max(intersectCube(vRayFrom, rayDirection), 0.0);
     if (tbounds.x >= tbounds.y) {
-        oColor = vec4(0, 0, 0, 1);
-    }
-    else {
+        oColor = vec4(0.0, 0.0, 0.0, 1.0);
+    } else {
         vec3 from = mix(vRayFrom, vRayTo, tbounds.x);
         vec3 to = mix(vRayFrom, vRayTo, tbounds.y);
         float rayStepLength = distance(from, to) * uStepSize;
 
         float t = 0.0;
-        if (uType == 1.0) {
-            t = uStepSize * uOffset;
-        }
+        // Sample offset
+        if (uType == 1.0) { t = uStepSize * uOffset; }
+
         vec3 pos;
         float val;
         vec4 colorSample;
-        vec4 accumulator = vec4(0);
+        vec4 accumulator = vec4(0.0);
 
         if (uType < 1.0) {
             vec2 randPosition = vRayFrom.xy * uOffset;
             vec2 r = rand(randPosition);
 
             for(int i = 1; i <= int(1.0 / uStepSize); i++) {
-                if (accumulator.a > 0.99) {
-                    break;
-                }
+                if (accumulator.a > 0.99) { break; }
 
                 pos = mix(from, to, t);
                 val = texture(uVolume, pos).r;
@@ -78,8 +75,7 @@ void main() {
                 t = uStepSize * float(i) + (r.x - 0.5) * uStepSize;
                 r = rand(r);
             }
-        }
-        else {
+        } else {
             while (t < 1.0 && accumulator.a < 0.99) {
                 pos = mix(from, to, t);
                 val = texture(uVolume, pos).r;
@@ -104,13 +100,14 @@ void main() {
 // #part /glsl/shaders/renderers/EAM/integrate/vertex
 
 #version 300 es
+precision mediump float;
 
 layout(location = 0) in vec2 aPosition;
 out vec2 vPosition;
 
 void main() {
-    vPosition = aPosition * 0.5 + 0.5;
-    gl_Position = vec4(aPosition, 0, 1);
+    vPosition = (aPosition + 1.0) * 0.5;
+    gl_Position = vec4(aPosition, 0.0, 1.0);
 }
 
 // #part /glsl/shaders/renderers/EAM/integrate/fragment
@@ -133,13 +130,14 @@ void main() {
 // #part /glsl/shaders/renderers/EAM/render/vertex
 
 #version 300 es
+precision mediump float;
 
 layout(location = 0) in vec2 aPosition;
 out vec2 vPosition;
 
 void main() {
-    vPosition = aPosition * 0.5 + 0.5;
-    gl_Position = vec4(aPosition, 0, 1);
+    vPosition = (aPosition + 1.0) * 0.5;
+    gl_Position = vec4(aPosition, 0.0, 1.0);
 }
 
 // #part /glsl/shaders/renderers/EAM/render/fragment
@@ -157,13 +155,13 @@ void main() {
 }
 
 // #part /glsl/shaders/renderers/EAM/reset/vertex
-
 #version 300 es
+precision mediump float;
 
 layout(location = 0) in vec2 aPosition;
 
 void main() {
-    gl_Position = vec4(aPosition, 0, 1);
+    gl_Position = vec4(aPosition, 0.0, 1.0);
 }
 
 // #part /glsl/shaders/renderers/EAM/reset/fragment
@@ -174,5 +172,5 @@ precision mediump float;
 out vec4 oColor;
 
 void main() {
-    oColor = vec4(0, 0, 0, 1);
+    oColor = vec4(0.0, 0.0, 0.0, 1.0);
 }
