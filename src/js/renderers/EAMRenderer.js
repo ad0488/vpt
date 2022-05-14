@@ -13,18 +13,40 @@ constructor(gl, volume, environmentTexture, options) {
 
     this.registerProperties([
         {
-            name: 'extinction',
-            label: 'X',
-            type: 'spinner',
-            value: 100,
-            min: 0,
+            name: 'type',
+            label: 'Type',
+            type: 'dropdown',
+            options: [
+                {
+                    value: 0,
+                    label: 'Jitter'
+                },
+                {
+                    value: 1,
+                    label: 'Offset'
+                },
+                {
+                    value: 2,
+                    label: 'Regular',
+                    'selected': true
+                }
+            ]
         },
         {
-            name: 'slices',
-            label: 'Slices',
+            name: 'steps',
+            label: 'Steps',
             type: 'spinner',
-            value: 64,
-            min: 1,
+            value: 10,
+            min: 1
+        },
+        {
+            name: 'opacity',
+            label: 'Opacity',
+            type: 'spinner',
+            logarithmic: true,
+            value: 1,
+            min: 0,
+            step: 0.1
         },
         {
             name: 'transferFunction',
@@ -43,6 +65,7 @@ constructor(gl, volume, environmentTexture, options) {
 
         if ([
             'extinction',
+            'type',
             'slices',
         ].includes(name)) {
             this.reset();
@@ -84,7 +107,8 @@ _generateFrame() {
     gl.uniform1i(uniforms.uVolume, 0);
     gl.uniform1i(uniforms.uTransferFunction, 1);
     gl.uniform1f(uniforms.uStepSize, 1 / this.slices);
-    gl.uniform1f(uniforms.uExtinction, this.extinction);
+    gl.uniform1f(uniforms.uAlphaCorrection, this._alphaCorrection);
+    gl.uniform1f(uniforms.uType, this._type);
     gl.uniform1f(uniforms.uOffset, Math.random());
     const mvpit = this.calculateMVPInverseTranspose();
     gl.uniformMatrix4fv(uniforms.uMvpInverseMatrix, false, mvpit.m);

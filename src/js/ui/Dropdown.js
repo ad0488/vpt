@@ -11,6 +11,7 @@ constructor(options) {
     Object.assign(this, {
         options: []
     }, options);
+    console.log(options);
 
     for (let option of this.options) {
         this.addOption(option.value, option.label, option.selected);

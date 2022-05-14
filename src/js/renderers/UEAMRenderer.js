@@ -32,7 +32,7 @@ export class UEAMRenderer extends AbstractRenderer {
                 name: 'steps',
                 label: 'Steps',
                 type: 'spinner',
-                value: 8,
+                value: 10,
                 min: 1
             },
             {

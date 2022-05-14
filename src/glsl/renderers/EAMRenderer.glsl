@@ -26,6 +26,8 @@ uniform mediump sampler2D uTransferFunction;
 uniform float uStepSize;
 uniform float uOffset;
 uniform float uExtinction;
+uniform float uType;
+uniform float uAlphaCorrection;
 
 in vec3 vRayFrom;
 in vec3 vRayTo;
@@ -34,41 +36,70 @@ out vec4 oColor;
 // #link /glsl/mixins/intersectCube.glsl
 @intersectCube
 
-vec4 sampleVolumeColor(vec3 position) {
-    vec2 volumeSample = texture(uVolume, position).rg;
-    vec4 transferSample = texture(uTransferFunction, volumeSample);
-    return transferSample;
-}
+// #link /glsl/mixins/rand.glsl
+@rand
 
 void main() {
     vec3 rayDirection = vRayTo - vRayFrom;
     vec2 tbounds = max(intersectCube(vRayFrom, rayDirection), 0.0);
     if (tbounds.x >= tbounds.y) {
         oColor = vec4(0, 0, 0, 1);
-    } else {
+    }
+    else {
         vec3 from = mix(vRayFrom, vRayTo, tbounds.x);
         vec3 to = mix(vRayFrom, vRayTo, tbounds.y);
         float rayStepLength = distance(from, to) * uStepSize;
 
         float t = 0.0;
+        if (uType == 1.0) {
+            t = uStepSize * uOffset;
+        }
+        vec3 pos;
+        float val;
+        vec4 colorSample;
         vec4 accumulator = vec4(0);
 
-        while (t < 1.0 && accumulator.a < 0.99) {
-            vec3 position = mix(from, to, t);
-            vec4 colorSample = sampleVolumeColor(position);
-            colorSample.a *= rayStepLength * uExtinction;
-            colorSample.rgb *= colorSample.a;
-            accumulator += (1.0 - accumulator.a) * colorSample;
-            t += uStepSize;
+        if (uType < 1.0) {
+            vec2 randPosition = vRayFrom.xy * uOffset;
+            vec2 r = rand(randPosition);
+
+            for(int i = 1; i <= int(1.0 / uStepSize); i++) {
+                if (accumulator.a > 0.99) {
+                    break;
+                }
+
+                pos = mix(from, to, t);
+                val = texture(uVolume, pos).r;
+                colorSample = texture(uTransferFunction, vec2(val, 0.5));
+                colorSample.a *= rayStepLength * uAlphaCorrection;
+                colorSample.rgb *= colorSample.a;
+                accumulator += (1.0 - accumulator.a) * colorSample;
+
+                t = uStepSize * float(i) + (r.x - 0.5) * uStepSize;
+                r = rand(r);
+            }
+        }
+        else {
+            while (t < 1.0 && accumulator.a < 0.99) {
+                pos = mix(from, to, t);
+                val = texture(uVolume, pos).r;
+                colorSample = texture(uTransferFunction, vec2(val, 0.5));
+                colorSample.a *= rayStepLength * uAlphaCorrection;
+                colorSample.rgb *= colorSample.a;
+                accumulator += (1.0 - accumulator.a) * colorSample;
+
+                t += uStepSize;
+            }
         }
 
         if (accumulator.a > 1.0) {
             accumulator.rgb /= accumulator.a;
         }
 
-        oColor = vec4(accumulator.rgb, 1);
+        oColor = vec4(accumulator.rgb, 1.0);
     }
 }
+
 
 // #part /glsl/shaders/renderers/EAM/integrate/vertex
 
@@ -94,7 +125,9 @@ in vec2 vPosition;
 out vec4 oColor;
 
 void main() {
-    oColor = texture(uFrame, vPosition);
+    vec4 acc = texture(uAccumulator, vPosition);
+    vec4 frame = texture(uFrame, vPosition);
+    oColor = max(frame, acc);
 }
 
 // #part /glsl/shaders/renderers/EAM/render/vertex
