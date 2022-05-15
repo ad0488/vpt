@@ -51,7 +51,9 @@ void main() {
 
         float t = 0.0;
         // Sample offset
-        if (uType == 1.0) { t = uStepSize * uOffset; }
+        if (uType == 1.0) {
+            t = uStepSize + uOffset;
+        }
 
         vec3 pos;
         float val;
@@ -63,6 +65,7 @@ void main() {
             vec2 r = rand(randPosition);
 
             for(int i = 1; i <= int(1.0 / uStepSize); i++) {
+
                 if (accumulator.a > 0.99) { break; }
 
                 pos = mix(from, to, t);
